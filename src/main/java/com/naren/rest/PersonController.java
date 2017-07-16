@@ -26,7 +26,7 @@ public final class PersonController{
 	@Autowired
 	private PersonRepository personRepo;
 	
-	@RequestMapping("/")
+	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public void home(HttpServletResponse response) throws IOException{
 		response.sendRedirect("/person");
 	}

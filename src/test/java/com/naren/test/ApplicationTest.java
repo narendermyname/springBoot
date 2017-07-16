@@ -5,23 +5,11 @@ package com.naren.test;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import com.naren.rest.Person;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import com.naren.rest.Application;
+import com.naren.rest.Person;
 
 /**
  * @author narender
