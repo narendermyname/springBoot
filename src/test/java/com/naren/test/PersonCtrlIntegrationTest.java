@@ -9,6 +9,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -29,12 +31,15 @@ import com.naren.rest.dto.Person;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {Application.class})
 public class PersonCtrlIntegrationTest {
+	
+	private static final Logger LOGGER =  LoggerFactory.getLogger(PersonCtrlIntegrationTest.class);
 
 	@Autowired
 	private TestRestTemplate restTemplate;
 
 	@Test
-	public void createClient() {
+	public void getPersonTest() {
+		LOGGER.info("Start Get prson test");
 		ResponseEntity<Person> responseEntity = restTemplate.getForEntity("/api/v1/person/34", Person.class);
 		Person client = responseEntity.getBody();
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
