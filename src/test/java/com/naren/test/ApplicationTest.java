@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import com.naren.rest.Person;
+import com.naren.rest.dto.Person;
 
 /**
  * @author narender
