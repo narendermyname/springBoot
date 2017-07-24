@@ -19,6 +19,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.PlatformTransactionManager;
 
 /**
@@ -32,6 +33,7 @@ public class AppConfig {
 	private Environment env;
 
 	@Bean
+	@Primary
 	public DataSource dataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName(env.getProperty("datasource.driver"));
@@ -40,10 +42,9 @@ public class AppConfig {
 		dataSource.setPassword(env.getProperty("datasource.password"));
 		return dataSource;
 	}
-	
-	@Bean
-	@ConfigurationProperties( prefix = "spring.datasource")
-	@Primary
+
+	@Bean(name = {"dataSource2"})
+	@ConfigurationProperties(prefix = "spring.datasource")
 	public DataSource dataSource2() {
 		return DataSourceBuilder.create().build();
 	}
@@ -57,8 +58,8 @@ public class AppConfig {
 		LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
 		factory.setJpaVendorAdapter(vendorAdapter);
 		factory.setPackagesToScan("com.naren");
-		//factory.setDataSource(dataSource());
-		factory.setDataSource(dataSource2());
+		factory.setDataSource(dataSource());
+		//factory.setDataSource(dataSource2());
 		factory.afterPropertiesSet();
 		factory.setJpaProperties(additionalProperties());
 
@@ -79,5 +80,11 @@ public class AppConfig {
 		properties.setProperty("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl"));
 		properties.setProperty("hibernate.dialect", env.getProperty("hibernate.dialect"));
 		return properties;
+	}
+
+	@Bean
+	public BCryptPasswordEncoder passwordEncoder() {
+		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+		return bCryptPasswordEncoder;
 	}
 }

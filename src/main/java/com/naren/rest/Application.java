@@ -10,8 +10,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.naren.rest.dto.Person;
-import com.naren.rest.repositories.PersonRepository;
+import com.naren.rest.dto.User;
+import com.naren.rest.repositories.UserRepository;
 
 @SpringBootApplication
 @EnableJpaRepositories
@@ -25,13 +25,13 @@ public class Application {
 
 @Component
 @Order(value=1)
-class PersonComponent implements CommandLineRunner{
+class UserComponent implements CommandLineRunner{
 	@Autowired
-	private PersonRepository personRepo;
+	private UserRepository userRepo;
 	@Override
 	public void run(String... arg0) throws Exception {
-		for(Person person :personRepo.findAll()){
+		/*for(User person :userRepo.findAll()){
 			System.out.println(person.toString());
-		}
+		}*/
 	}
 }

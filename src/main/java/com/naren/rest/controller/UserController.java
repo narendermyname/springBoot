@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.naren.rest.dto.Person;
+import com.naren.rest.dto.User;
 import com.naren.rest.exception.GenericException;
 import com.naren.rest.exception.NotFoundException;
-import com.naren.rest.repositories.PersonRepository;
+import com.naren.rest.repositories.UserRepository;
 
 /**
  * @author ntanwa
@@ -31,16 +31,16 @@ import com.naren.rest.repositories.PersonRepository;
 
 @RestController
 @RequestMapping("/api/v1")
-public final class PersonController {
+public final class UserController {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(PersonController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
 	@Autowired
-	private PersonRepository personRepo;
+	private UserRepository userRepo;
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public void home(HttpServletResponse response) throws IOException {
-		response.sendRedirect("/person");
+		response.sendRedirect("/user");
 	}
 
 	/**
@@ -49,12 +49,12 @@ public final class PersonController {
 	 * @return
 	 * @throws NotFoundException
 	 */
-	@RequestMapping(value = "person", method = RequestMethod.GET)
-	public Collection<Person> findAll() throws NotFoundException {
-		if (personRepo.findAll().isEmpty()) {
+	@RequestMapping(value = "user", method = RequestMethod.GET)
+	public Collection<User> findAll() throws NotFoundException {
+		if (userRepo.findAll().isEmpty()) {
 			throw new NotFoundException("No record found in DB. ");
 		} else
-			return personRepo.findAll();
+			return userRepo.findAll();
 	}
 
 	/**
@@ -63,37 +63,37 @@ public final class PersonController {
 	 * @return
 	 * @throws GenericException
 	 */
-	@RequestMapping(value = "person/{id}", method = RequestMethod.GET)
-	public Person find(@PathVariable("id") String id) throws GenericException {
-		return personRepo.findOne(parseId(id));
+	@RequestMapping(value = "user/{id}", method = RequestMethod.GET)
+	public User find(@PathVariable("id") Long id) throws GenericException {
+		return userRepo.findOne(id);
 	}
 
 	/**
-	 * Add Person
+	 * Add user
 	 * 
 	 * @param req
-	 * @param person
-	 * @return {person}
+	 * @param user
+	 * @return {user}
 	 */
-	@RequestMapping(value = "person", method = RequestMethod.POST)
-	public Person add(HttpServletRequest req, @RequestBody Person person) {
-		return personRepo.saveAndFlush(person);
+	@RequestMapping(value = "user", method = RequestMethod.POST)
+	public User add(HttpServletRequest req, @RequestBody User user) {
+		return userRepo.saveAndFlush(user);
 	}
 
 	/**
-	 * Add Person
+	 * Add user
 	 * 
 	 * @param req
-	 * @param person
-	 * @return {person}
+	 * @param user
+	 * @return {user}
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "person/{id}", method = RequestMethod.PUT)
-	public Person add(@PathVariable("id") String id, @RequestBody Person person) throws GenericException {
+	@RequestMapping(value = "user/{id}", method = RequestMethod.PUT)
+	public User add(@PathVariable("id") Long id, @RequestBody User user) throws GenericException {
 		// String credentials = req.getHeader("Authorization");
-		Person exist = personRepo.findOne(parseId(id));
-		BeanUtils.copyProperties(person, exist);
-		return personRepo.saveAndFlush(person);
+		User exist = userRepo.findOne(id);
+		BeanUtils.copyProperties(user, exist);
+		return userRepo.saveAndFlush(user);
 	}
 
 	/**
@@ -102,18 +102,18 @@ public final class PersonController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "person/{id}", method = RequestMethod.DELETE)
-	public void delete(@PathVariable("id") String id) throws GenericException {
-		personRepo.delete(parseId(id));
+	@RequestMapping(value = "user/{id}", method = RequestMethod.DELETE)
+	public void delete(@PathVariable("id") Long id) throws GenericException {
+		userRepo.delete(id);
 	}
 
 	/**
-	 * Parse String Id to long or throw Generic Exception if id is not proper.
+	 * Parse Long id to long or throw Generic Exception if id is not proper.
 	 * @param id
 	 * @return
 	 * @throws GenericException
 	 */
-	private Long parseId(String id) throws GenericException {
+	/*private Long parseId(Long id) throws GenericException {
 		LOGGER.info("Parsing Id " + id);
 		try {
 			return Long.parseLong(id);
@@ -121,5 +121,5 @@ public final class PersonController {
 			LOGGER.info("Error : " + e.getMessage());
 			throw new GenericException("Record with Id  " + id + " not found");
 		}
-	}
+	}*/
 }

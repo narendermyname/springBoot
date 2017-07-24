@@ -5,8 +5,6 @@ package com.naren.test;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -19,7 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.naren.rest.Application;
-import com.naren.rest.dto.Person;
+import com.naren.rest.dto.User;
 
 /**
  * Integration test class
@@ -40,8 +38,8 @@ public class PersonCtrlIntegrationTest {
 	@Test
 	public void getPersonTest() {
 		LOGGER.info("Start Get prson test");
-		ResponseEntity<Person> responseEntity = restTemplate.getForEntity("/api/v1/person/34", Person.class);
-		Person client = responseEntity.getBody();
+		ResponseEntity<User> responseEntity = restTemplate.getForEntity("/api/v1/person/34", User.class);
+		User client = responseEntity.getBody();
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 		assertEquals(34l, client.getId());
 	}

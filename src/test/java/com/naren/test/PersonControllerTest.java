@@ -4,6 +4,9 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,10 +14,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import com.naren.rest.controller.PersonController;
-import com.naren.rest.dto.Person;
+import com.naren.rest.controller.UserController;
+import com.naren.rest.dto.Role;
+import com.naren.rest.dto.User;
 import com.naren.rest.exception.GenericException;
-import com.naren.rest.repositories.PersonRepository;
+import com.naren.rest.repositories.UserRepository;
 
 /**
  * Unit test class
@@ -24,10 +28,10 @@ import com.naren.rest.repositories.PersonRepository;
 public class PersonControllerTest {
 
 	@InjectMocks
-	private PersonController pc;
+	private UserController pc;
 	
 	@Mock
-	private PersonRepository personRepo;
+	private UserRepository personRepo;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -40,10 +44,14 @@ public class PersonControllerTest {
 
 	@Test
 	public void getTest() {
-		Person p = null;
+		User p = null;
 		try {
-			when(personRepo.findOne(1l)).thenReturn(new Person(1l,"Naren"));
-			p = pc.find("1");
+			Set<Role> roles = new HashSet<>();
+			
+			roles.add(new Role(1,"ROLE_USER"));
+			User user = new User(1, "slaxmi@gmail.com", "password", "Laxmi", "Shekhawat", 1, roles);
+			when(personRepo.findOne(1l)).thenReturn(user);
+			p = pc.find(1l);
 			verify(personRepo).findOne(1l);
 		} catch (GenericException e) {
 			System.out.println("Error : "+e.getMessage());

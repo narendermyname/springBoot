@@ -8,13 +8,19 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.naren.rest.dto.Person;
+import com.naren.rest.dto.User;
 
 /**
  * @author ntanwa
  *
  */
 @Repository
-public interface PersonRepository extends JpaRepository<Person, Long> {
-	List<Person> findAll();
+public interface UserRepository extends JpaRepository<User, Long> {
+	List<User> findAll();
+
+	/**
+	 * @param email
+	 * @return
+	 */
+	User findByEmail(String email);
 }
