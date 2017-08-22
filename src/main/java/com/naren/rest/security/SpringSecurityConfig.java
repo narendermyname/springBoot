@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
 /**
@@ -24,10 +25,13 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private AccessDeniedHandler accessDeniedHandler;
-
-	/*@Autowired
+	
+	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
-*/
+
+	/*
+	 * @Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
+	 */
 	@Autowired
 	private DataSource dataSource;
 
@@ -44,11 +48,13 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		String adminRole = env.getProperty("spring.sec.admin.role");
 		String userRole = env.getProperty("spring.sec.user.role");
-		http.csrf().disable().authorizeRequests().antMatchers("/").authenticated()
-				// .antMatchers("/").hasAnyRole("ADMIN")
+		http.csrf().disable()
+				.authorizeRequests()/* .antMatchers("/") *//*
+															 * .authenticated()
+															 */
 				.antMatchers("/api/v1/**").hasAnyRole(adminRole).antMatchers("/admin/**").hasAnyRole(adminRole)
 				.antMatchers("/user/**").hasAnyRole(userRole).anyRequest().authenticated().and().formLogin()
-				// .loginPage("/login") .permitAll()
+				// .loginPage("/indx").permitAll()
 				.and().logout().logoutUrl("/logout").permitAll().and().exceptionHandling()
 				.accessDeniedHandler(accessDeniedHandler);
 	}
@@ -63,15 +69,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 					.password(env.getProperty("spring.sec.admin.password"))
 					.roles(env.getProperty("spring.sec.admin.role"));
 		else
-			auth.jdbcAuthentication()/*
-										 * .usersByUsernameQuery(usersQuery).
-										 * authoritiesByUsernameQuery(
-										 * rolesQuery)
-										 */
-					.dataSource(dataSource)/*
-											 * .passwordEncoder(
-											 * bCryptPasswordEncoder)
-											 */;
+			auth.jdbcAuthentication().usersByUsernameQuery(usersQuery).authoritiesByUsernameQuery(rolesQuery)
+					.dataSource(dataSource).passwordEncoder(bCryptPasswordEncoder);
 	}
 
 	@Override

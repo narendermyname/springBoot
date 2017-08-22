@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.naren.rest.dto.Role;
 import com.naren.rest.dto.User;
 import com.naren.rest.repositories.RoleRepository;
+import com.naren.rest.repositories.UserJpaRepository;
 import com.naren.rest.repositories.UserRepository;
 
 /**
@@ -21,7 +22,7 @@ import com.naren.rest.repositories.UserRepository;
 public class UserServiceImpl implements UserService {
 
 	@Autowired
-	private UserRepository userRepository;
+	private UserJpaRepository userRepository;
 	@Autowired
 	private RoleRepository roleRepository;
 	@Autowired

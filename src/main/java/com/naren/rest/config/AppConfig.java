@@ -60,9 +60,9 @@ public class AppConfig {
 		factory.setPackagesToScan("com.naren");
 		factory.setDataSource(dataSource());
 		//factory.setDataSource(dataSource2());
-		factory.afterPropertiesSet();
+		
 		factory.setJpaProperties(additionalProperties());
-
+		factory.afterPropertiesSet();
 		return factory.getObject();
 	}
 

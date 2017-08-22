@@ -3,6 +3,8 @@
  */
 package com.naren.rest.controller;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -26,8 +28,12 @@ public class HomeController {
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@GetMapping("/")
-	public String home1(HttpServletRequest req, HttpServletResponse resp) {
-		return "home";
+	public void home1(HttpServletRequest req, HttpServletResponse resp) {
+		try {
+			resp.sendRedirect("/index.html");
+		} catch (IOException e) {
+			System.out.println("Error : "+e.getMessage());
+		};
 	}
 
 	@GetMapping("/home")
@@ -50,19 +56,9 @@ public class HomeController {
 		return "about";
 	}
 
-	@GetMapping("/login")
-	public String login() {
-		return "login";
-	}
-
 	@GetMapping("/protected")
 	public void error403(HttpServletRequest req) throws GenericException {
 		throw new GenericException("access to this url " + req.getRequestURL() + " not allows");
-	}
-
-	@GetMapping
-	public String error(HttpServletRequest req) {
-		return "Error ";
 	}
 
 	@GetMapping("/encode/{encodeStr}")

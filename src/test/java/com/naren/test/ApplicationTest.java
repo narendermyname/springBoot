@@ -36,17 +36,17 @@ public class ApplicationTest {
 		 * query=em.createQuery("SELECT p FROM Person p");
 		 * query.getResultList().stream().forEach(e -> System.out.println(e));
 		 */
-		// getPersons();
-		postPerson();
+		// getUsers();
+		postUser();
 	}
 
 	@SuppressWarnings({ "unchecked", "unused" })
-	private static void getPersons() {
+	private static void getUsers() {
 		List<User> p1 = templet.getForObject(PERSON_RESOURCE, List.class);
 		// p1.stream().forEach(p -> System.out.println(p1));
 	}
 
-	private static void postPerson() {
+	private static void postUser() {
 		Set<Role> roles = new HashSet<>();
 
 		roles.add(new Role(1, "ROLE_USER"));

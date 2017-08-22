@@ -18,7 +18,7 @@ import com.naren.rest.controller.UserController;
 import com.naren.rest.dto.Role;
 import com.naren.rest.dto.User;
 import com.naren.rest.exception.GenericException;
-import com.naren.rest.repositories.UserRepository;
+import com.naren.rest.repositories.UserJpaRepository;
 
 /**
  * Unit test class
@@ -31,7 +31,7 @@ public class PersonControllerTest {
 	private UserController pc;
 	
 	@Mock
-	private UserRepository personRepo;
+	private UserJpaRepository personRepo;
 	
 	@Before
 	public void setUp() throws Exception {

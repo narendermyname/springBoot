@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.naren.rest.dto.User;
 import com.naren.rest.exception.GenericException;
 import com.naren.rest.exception.NotFoundException;
+import com.naren.rest.repositories.UserJpaRepository;
 import com.naren.rest.repositories.UserRepository;
 
 /**
@@ -36,12 +37,7 @@ public final class UserController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
 	@Autowired
-	private UserRepository userRepo;
-
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public void home(HttpServletResponse response) throws IOException {
-		response.sendRedirect("/user");
-	}
+	private UserJpaRepository userRepo;
 
 	/**
 	 * Get
@@ -90,7 +86,6 @@ public final class UserController {
 	 */
 	@RequestMapping(value = "user/{id}", method = RequestMethod.PUT)
 	public User add(@PathVariable("id") Long id, @RequestBody User user) throws GenericException {
-		// String credentials = req.getHeader("Authorization");
 		User exist = userRepo.findOne(id);
 		BeanUtils.copyProperties(user, exist);
 		return userRepo.saveAndFlush(user);
@@ -106,20 +101,4 @@ public final class UserController {
 	public void delete(@PathVariable("id") Long id) throws GenericException {
 		userRepo.delete(id);
 	}
-
-	/**
-	 * Parse Long id to long or throw Generic Exception if id is not proper.
-	 * @param id
-	 * @return
-	 * @throws GenericException
-	 */
-	/*private Long parseId(Long id) throws GenericException {
-		LOGGER.info("Parsing Id " + id);
-		try {
-			return Long.parseLong(id);
-		} catch (NumberFormatException e) {
-			LOGGER.info("Error : " + e.getMessage());
-			throw new GenericException("Record with Id  " + id + " not found");
-		}
-	}*/
 }
