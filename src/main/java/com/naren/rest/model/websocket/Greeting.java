@@ -1,4 +1,4 @@
-package com.naren.rest.websocket.model;
+package com.naren.rest.model.websocket;
 
 public class Greeting {
 

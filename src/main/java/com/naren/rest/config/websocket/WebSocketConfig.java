@@ -1,4 +1,4 @@
-package com.naren.rest.websocket.config;
+package com.naren.rest.config.websocket;
 
 
 import org.springframework.context.annotation.Configuration;
@@ -7,6 +7,11 @@ import org.springframework.web.socket.config.annotation.AbstractWebSocketMessage
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 
+/**
+ * Web Socket Configuration bean
+ * @author ntanwa
+ *
+ */
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
@@ -20,6 +25,7 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/gs-guide-websocket").withSockJS();
+        registry.addEndpoint("/chat").setAllowedOrigins("*").withSockJS();
     }
 
 }

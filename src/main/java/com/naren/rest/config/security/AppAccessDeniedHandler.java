@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.naren.rest.security;
+package com.naren.rest.config.security;
 
 import java.io.IOException;
 

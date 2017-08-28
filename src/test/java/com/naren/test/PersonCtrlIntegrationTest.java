@@ -4,6 +4,10 @@
 package com.naren.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,7 +16,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -36,12 +44,27 @@ public class PersonCtrlIntegrationTest {
 	private TestRestTemplate restTemplate;
 
 	@Test
-	public void getPersonTest() {
-		LOGGER.info("Start Get prson test");
-		ResponseEntity<User> responseEntity = restTemplate.getForEntity("/api/v1/person/34", User.class);
-		User client = responseEntity.getBody();
-		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-		assertEquals(34l, client.getId());
+	public void getUsersTest() {
+		LOGGER.info("List all users");
+		//restTemplate.withBasicAuth("naren@gmail.com", "nsecret");
+		try{
+			HttpHeaders headers = new HttpHeaders();
+		    headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+		    headers.add("Authorization", "Basic bmFyZW5AZ21haWwuY29tOm5zZWNyZXQ=");
+		    
+		    HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
+		     
+		    ResponseEntity<String> responseEntity = restTemplate.exchange("/api/v1/user", HttpMethod.GET, entity, String.class);
+		    
+			String client = responseEntity.getBody();
+			LOGGER.info(client);
+			/*assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+			assertTrue(!client.isEmpty());*/
+		}catch(Exception e){
+			System.out.println(e);
+		}
 	}
+	
+	
 
 }

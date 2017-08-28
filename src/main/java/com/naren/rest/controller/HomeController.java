@@ -3,6 +3,9 @@
  */
 package com.naren.rest.controller;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,10 +13,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.naren.rest.exception.GenericException;
 
@@ -38,12 +48,16 @@ public class HomeController {
 
 	@GetMapping("/home")
 	public String home() {
-		return "home";
+		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String name = user.getUsername();
+		return "Hello "+name+"!";
 	}
 
 	@GetMapping("/admin")
 	public String admin() {
-		return "admin";
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String name = auth.getName();
+		return "admin "+name;
 	}
 
 	@GetMapping("/user")
@@ -73,5 +87,24 @@ public class HomeController {
 	@GetMapping("/logout")
 	public String logout() {
 		return "user succefully logout.";
+	}
+	
+	@PostMapping("/upload")
+	public String handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
+		String name = "test11";
+		if (!file.isEmpty()) {
+            try {
+                byte[] bytes = file.getBytes();
+                BufferedOutputStream stream = 
+                        new BufferedOutputStream(new FileOutputStream(new File("D://"+file.getOriginalFilename())));
+                stream.write(bytes);
+                stream.close();
+                return "You successfully uploaded " + name + " into " + name + "-uploaded !";
+            } catch (Exception e) {
+                return "You failed to upload " + name + " => " + e.getMessage();
+            }
+        } else {
+            return "You failed to upload " + name + " because the file was empty.";
+        }
 	}
 }

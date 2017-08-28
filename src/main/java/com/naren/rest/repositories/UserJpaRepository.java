@@ -5,10 +5,13 @@ package com.naren.rest.repositories;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.stereotype.Repository;
 
 import com.naren.rest.dto.User;
@@ -18,7 +21,9 @@ import com.naren.rest.dto.User;
  *
  */
 @Repository
-public interface UserJpaRepository extends JpaRepository<User, Long> {
+@RepositoryRestResource(path = "users", collectionResourceRel = "users")
+//@PreAuthorize(value = "")
+public interface UserJpaRepository extends JpaRepository<User, Long>, UserJpaRepositoryCustom{
 
 	// Please find more detail in
 	// https://docs.spring.io/spring-data/jpa/docs/current/reference/html/
@@ -81,7 +86,10 @@ public interface UserJpaRepository extends JpaRepository<User, Long> {
 	 * @return
 	 */
 	@Query("select u from User u where u.name = :name and u.active = :active order by u.name")
-	List<User> queryByNameAndActiveUser(@Param("name") String name, @Param("active") int active);
+	List<User> queryByNameAndActiveUser(@Param("name") String name, @Param("active") int active, Pageable page);
+	
+	@Query("select u from User u where u.active = :active")
+	Page<User> queryByActiveUser(@Param("active") int active, Pageable page);
 
 	@Query(value = "select * from USER whre name  = ?0", nativeQuery = true) 
 	//Use this query for performance related and data base specific

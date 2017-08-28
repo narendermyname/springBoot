@@ -23,11 +23,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.PlatformTransactionManager;
 
 /**
+ * Persistent Configuration
  * @author ntanwa
  *
  */
 @Configuration
-public class AppConfig {
+public class PersistentConfig {
 
 	@Autowired
 	private Environment env;
