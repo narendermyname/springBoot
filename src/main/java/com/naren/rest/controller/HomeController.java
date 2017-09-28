@@ -7,10 +7,14 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.security.core.Authentication;
@@ -20,6 +24,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,6 +39,7 @@ import com.naren.rest.exception.GenericException;
 @RestController
 public class HomeController {
 
+	private static final Logger LOG = Logger.getLogger(HomeController.class);
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -42,22 +48,23 @@ public class HomeController {
 		try {
 			resp.sendRedirect("/index.html");
 		} catch (IOException e) {
-			System.out.println("Error : "+e.getMessage());
-		};
+			System.out.println("Error : " + e.getMessage());
+		}
+		;
 	}
 
 	@GetMapping("/home")
 	public String home() {
-		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String name = user.getUsername();
-		return "Hello "+name+"!";
+		return "Hello " + name + "!";
 	}
 
 	@GetMapping("/admin")
 	public String admin() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String name = auth.getName();
-		return "admin "+name;
+		return "admin " + name;
 	}
 
 	@GetMapping("/user")
@@ -88,23 +95,38 @@ public class HomeController {
 	public String logout() {
 		return "user succefully logout.";
 	}
-	
+
 	@PostMapping("/upload")
 	public String handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
-		String name = "test11";
-		if (!file.isEmpty()) {
-            try {
-                byte[] bytes = file.getBytes();
-                BufferedOutputStream stream = 
-                        new BufferedOutputStream(new FileOutputStream(new File("D://"+file.getOriginalFilename())));
-                stream.write(bytes);
-                stream.close();
-                return "You successfully uploaded " + name + " into " + name + "-uploaded !";
-            } catch (Exception e) {
-                return "You failed to upload " + name + " => " + e.getMessage();
-            }
-        } else {
-            return "You failed to upload " + name + " because the file was empty.";
-        }
+		try {
+			if (!file.isEmpty()) {
+				LOG.debug("File "+file.getOriginalFilename()+" received");
+				try {
+					byte[] bytes = file.getBytes();
+					BufferedOutputStream stream = new BufferedOutputStream(
+							new FileOutputStream(new File("D://" + file.getOriginalFilename())));
+					stream.write(bytes);
+					stream.close();
+					return "You successfully uploaded " + file.getOriginalFilename() + " into " + file.getOriginalFilename()
+							+ "-uploaded !";
+				} catch (Exception e) {
+					return "You failed to upload " + file.getOriginalFilename() + " => " + e.getMessage();
+				}
+			} else {
+				return "You failed to upload " + file.getOriginalFilename() + " because the file was empty.";
+			}
+		} catch (Exception ee) {
+			System.out.println("Error : "+ee.getMessage());
+		}
+		return "Success...";
+	}
+
+	@RequestMapping("/resource")
+	public Map<String, Object> resource() {
+		LOG.info("Resource callled ----------------------------");
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("id", UUID.randomUUID().toString());
+		model.put("content", "Hello World");
+		return model;
 	}
 }

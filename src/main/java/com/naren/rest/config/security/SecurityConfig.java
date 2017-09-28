@@ -32,9 +32,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-	/*
-	 * @Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
-	 */
 	@Autowired
 	private DataSource dataSource;
 
@@ -63,7 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.anyRequest().authenticated()
 		.and().formLogin()
 		.permitAll()
-		// .loginPage("/indx").permitAll()
+		.loginPage("/login").permitAll()
 		.and().logout().logoutUrl("/logout").permitAll()
 		.and().exceptionHandling()
 		.accessDeniedHandler(accessDeniedHandler);

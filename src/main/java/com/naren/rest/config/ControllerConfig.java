@@ -8,9 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.naren.rest.exception.ErrorInfo;
 import com.naren.rest.exception.GenericException;
 
 /**
@@ -20,7 +22,7 @@ import com.naren.rest.exception.GenericException;
  * @author ntanwa
  *
  */
-@org.springframework.web.bind.annotation.ControllerAdvice
+@ControllerAdvice
 public class ControllerConfig {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ControllerConfig.class);
 
@@ -33,7 +35,9 @@ public class ControllerConfig {
 	// Either add this exception in Exception class or here
 	@ExceptionHandler(Exception.class)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void handleNoRecord(HttpServletRequest req, Exception e) {
+	public ErrorInfo handleNoRecord(HttpServletRequest req, Exception e) {
 		LOGGER.info("No Record found {}" + e);
+		
+		return new ErrorInfo(req.getPathInfo(), e.getMessage());
 	}
 }
