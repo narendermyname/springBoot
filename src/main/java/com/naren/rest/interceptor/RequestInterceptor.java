@@ -29,7 +29,7 @@ public class RequestInterceptor implements HandlerInterceptor {
 		return false;
 	}
 
-	/* (non-Javadoc)
+	/* (non-Javadoc) After handler method call
 	 * @see org.springframework.web.servlet.HandlerInterceptor#postHandle(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.Object, org.springframework.web.servlet.ModelAndView)
 	 */
 	@Override
@@ -38,7 +38,7 @@ public class RequestInterceptor implements HandlerInterceptor {
 		LOG.info("RequestInterceptor.postHandle()");
 	}
 
-	/* (non-Javadoc)
+	/* (non-Javadoc) After render view 
 	 * @see org.springframework.web.servlet.HandlerInterceptor#afterCompletion(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.Object, java.lang.Exception)
 	 */
 	@Override
